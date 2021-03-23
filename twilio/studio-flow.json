@@ -1,0 +1,165 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "next": "send_signup_confirmation",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingRequest"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "name": "send_signup_confirmation",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_confirm",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -70,
+          "y": 200
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Hi there, text CONFIRM to sign up for texts. Text STOP to stop receiving messages.",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "split_confirm",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "send_signup_promotion",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains confirm",
+              "arguments": [
+                "{{widgets.send_signup_confirmation.inbound.Body}}"
+              ],
+              "type": "contains",
+              "value": "confirm"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.send_signup_confirmation.inbound.Body}}",
+        "offset": {
+          "x": -120,
+          "y": 490
+        }
+      }
+    },
+    {
+      "name": "send_signup_promotion",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "generate_store_vcard",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 30,
+          "y": 750
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "You are now signed up to receive messages from Talbots. Use the code SPRING10 for 10% off your next purchase online or in store."
+      }
+    },
+    {
+      "name": "generate_store_vcard",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "send_vcard",
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "ZS8bf54f8422320eeabba71b1f478df92b",
+        "environment_sid": "ZE7e8d7550ec40f86761bef7c83cdf462c",
+        "offset": {
+          "x": 30,
+          "y": 990
+        },
+        "function_sid": "ZH857c1e1a53206696d6e6d999238ff482",
+        "parameters": [
+          {
+            "value": "{{trigger.message.From}}",
+            "key": "store_number"
+          }
+        ],
+        "url": "https://vcard-creator-7231.twil.io/vcard"
+      }
+    },
+    {
+      "name": "send_vcard",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 70,
+          "y": 1260
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Please save the store in your contacts",
+        "media_url": "https://vcard-creator-7231.twil.io/vcard"
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}
