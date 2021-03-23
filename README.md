@@ -9,7 +9,7 @@ This is a demonstration on how to generate a VCard with a dynamic store number. 
 - Optional: Knowledge of NodeJS and NPM
 
 ## Getting Started
-1. Log in to your Twilio account and set up a new Studio Flow. You can give this any descriptive name you want such as `Store VCard Generator`. Click `create from JSON`, and then copy and paste the code from the `twilio/studio-flow.json` file into your Studio Flow JSON. Save and then publish your Studio Flow.
+1. Log in to your Twilio account and set up a new Studio Flow. You can give this any descriptive name you want such as `Store VCard Generator`. Click `create from JSON`, and then copy and paste the code from the ```twilio/studio-flow.json``` file into your Studio Flow JSON. Save and then publish your Studio Flow.
 2. Navigate to the `Functions` tab in your Twilio console and create a new service. Give this a descriptive name such as `vcard-generator`.
 3. Within your service click the "Add +" button and add a new Function. Again, give this a descriptive name such as `vcard`.
 4. Copy and paste the javascript code from the `twilio/functions/vcard-generator.js` file and paste your code to replace the boilerplate code that was populated in your new Function.
