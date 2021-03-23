@@ -75,8 +75,8 @@
       "properties": {
         "input": "{{widgets.send_signup_confirmation.inbound.Body}}",
         "offset": {
-          "x": -120,
-          "y": 490
+          "x": -80,
+          "y": 470
         }
       }
     },
@@ -101,7 +101,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "You are now signed up to receive messages from Talbots. Use the code SPRING10 for 10% off your next purchase online or in store."
+        "body": "You are now signed up to receive messages. Use the code SPRING10 for 10% off your next purchase online or in store."
       }
     },
     {
